@@ -10,13 +10,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Reservas")
 @Table(name = "reservas")
 public class ReservasEntity  {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int idReservas;
     @DateTimeFormat
     public Date fechaReserva;
@@ -25,6 +26,7 @@ public class ReservasEntity  {
     @DateTimeFormat
     public Date fechaSalida;
     public Double precio;
+    public int idReservaCompartida;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable=false)
@@ -43,12 +45,17 @@ public class ReservasEntity  {
     @JsonBackReference
     public PensionesEntity idPension;
 
+
     
     public ReservasEntity() {
     }
 
+    public ReservasEntity(int idReservaCompartida) {
+        this.idReservaCompartida = idReservaCompartida;
+    }
+
     public ReservasEntity(int idReservas, Date fechaReserva, Date fechaEntrada, Date fechaSalida, double precio,
-                          UsuariosEntity usuario, ValoracionesEntity idValoraciones, HabitacionesEntity habitaciones, PensionesEntity pensiones) {
+                          UsuariosEntity usuario, ValoracionesEntity idValoraciones, HabitacionesEntity habitaciones, PensionesEntity pensiones, int idReservaCompartida) {
         this.idReservas = idReservas;
         this.fechaReserva = fechaReserva;
         this.fechaEntrada = fechaEntrada;
@@ -58,6 +65,7 @@ public class ReservasEntity  {
         this.idValoraciones = idValoraciones;
         this.idHabitaciones = habitaciones;
         this.idPension = pensiones;
+        this.idReservaCompartida = idReservaCompartida;
     }
 
     public int getIdReservas() {
@@ -131,6 +139,14 @@ public class ReservasEntity  {
 
     public void setPensiones(PensionesEntity pensiones) {
         this.idPension = pensiones;
+    }
+
+    public int getIdReservaCompartida() {
+        return idReservaCompartida;
+    }
+
+    public void setIdReservaCompartida(int idReservaCompartida) {
+        this.idReservaCompartida = idReservaCompartida;
     }
 }
 

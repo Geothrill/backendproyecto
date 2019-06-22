@@ -14,24 +14,49 @@ import java.util.List;
 public interface ReservasRepository extends JpaRepository<ReservasEntity, Integer> {
     List<ReservasEntity> findAll();
 
-    List<ReservasEntity> findReservasByIdUsuario(int idUsuario);
+    @Query(value = "select max(reservas.idReservaCompartida) from reservas", nativeQuery = true)
+    int getMaxIdReservaCompartida();
 
+    @Query(value = "SELECT *  FROM reservas ORDER BY idReservas DESC LIMIT 1", nativeQuery = true)
+    ReservasEntity getLastReservaByUser();
 
-    @Query(value = "select * from reservas where id_habitaciones in (SELECT idHabitaciones FROM habitaciones WHERE precio BETWEEN ?1 AND ?2)", nativeQuery = true)
-    List<ReservasEntity> findReservasByHabitacionesPrecio(Double precio1, Double precio2);
+    @Query(value = "select distinct idReservaCompartida from reservas where idUsuario = (select idUsuario from usuarios where email like ?1) order by idReservaCompartida", nativeQuery = true)
+    List<Integer> reservasUsuario(String email);
+
+    @Query(value = "select * from reservas where idUsuario in (SELECT idUsuario FROM usuarios WHERE email like ?1) and idReservaCompartida = ?2", nativeQuery = true)
+    List<ReservasEntity> getReservas(String email, int idReservaCompartida);
+
+    @Query(value = "select sum(precio) from reservas where idUsuario in (SELECT idUsuario FROM usuarios WHERE email like ?1) and idReservaCompartida = ?2", nativeQuery = true)
+    int sumPrecioReservaCompleta(String email, int idReservaCompartida);
+
+    @Query(value = "select * from reservas where idUsuario in (SELECT idUsuario FROM usuarios WHERE email like ?1)", nativeQuery = true)
+    List<ReservasEntity> findReservasByEmail( String email);
 
 
     @Transactional
     @Modifying
-    @Query(value = "insert into reservas set (fechaReserva, fechaEntrada,fechaSalida,precio,idUsuario,idHabitaciones,idPension)" +
-            "    values (?1, ?2,?3,  (select precio from habitaciones where idHabitaciones = ?5) +" +
-            "            ((select ocupantes from habitaciones where idHabitaciones = ?5) * (select precio from pension where idPension = ?6)) , (select idUsuario where email like ?4),?5,?6)", nativeQuery = true)
-    ReservasEntity newReserva(Date fechaReserva,Date fechaEntrada,Date fechaSalida,String email,int idHabitaciones, int idPension);
+    @Query(value = "insert into reservas (fechaReserva, fechaEntrada,fechaSalida,precio,idUsuario,idHabitaciones,idPension)" +
+            "    values (?1, ?2,?3,  (datediff(?3,?2)*(select precio from habitaciones where idHabitaciones = ?5)) +" +
+            "            ((datediff(?3,?2))*((select ocupantes from habitaciones where idHabitaciones = ?5) * (select precio from pension where idPension = ?6))) , (select idUsuario from usuarios where email like ?4),?5,?6, ?7)", nativeQuery = true)
+    void newReserva(Date fechaReserva,Date fechaEntrada,Date fechaSalida,String email,int idHabitaciones, int idPension, int idReservaCompartida);
 
     @Transactional
     @Modifying
-    @Query(value = "delete from reservas where idReserva = ?1", nativeQuery = true)
-    ReservasEntity deleteReserva(int idReserva);
+    @Query(value = "insert into reservas (fechaReserva, fechaEntrada,fechaSalida,precio,idUsuario,idHabitaciones,idPension, idReservaCompartida)" +
+            "values (?1, ?2,?3,  (datediff(?3,?2)*(select precio from habitaciones where idHabitaciones = ?5)) +" +
+            "((datediff(?3,?2))*((select ocupantes from habitaciones where idHabitaciones = ?5) * (select precio from pension where idPension = ?6))) ," +
+            " (select idUsuario from usuarios where email like ?4),?5,?6, ?7)", nativeQuery = true)
+    void addReserva(Date fechaReserva,Date fechaEntrada,Date fechaSalida,String email,int idHabitaciones, int idPension, int idReservaCompartida);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from reservas where idReservas = ?1", nativeQuery = true)
+    void delete1Reserva(int idReserva);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from reservas where idReservaCompartida = ?1", nativeQuery = true)
+    void deleteGroupReserva(int idReservaCompartida);
 
 
 

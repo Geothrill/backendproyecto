@@ -11,8 +11,9 @@ import java.util.List;
 
 @Repository
 public interface UsuariosRepository extends JpaRepository<UsuariosEntity, Integer> {
-
     List<UsuariosEntity> findAll();
+
+    List<UsuariosEntity> findUsuariosByTipoUsuario(char tipoUsuario);
 
     UsuariosEntity findByIdUsuario(int idUsuario);
 
@@ -20,8 +21,8 @@ public interface UsuariosRepository extends JpaRepository<UsuariosEntity, Intege
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO usuarios ( nombre, apellidos, email, password) values (?1,?2,?3,?4)", nativeQuery = true)
-    void createUsuario(String nombre, String apellidos, String email, String password);
+    @Query(value = "INSERT INTO usuarios ( nombre, apellidos, email, password, tipoUsuario) values (?1,?2,?3,?4,?5)", nativeQuery = true)
+    void createUsuario(String nombre, String apellidos, String email, String password,Character tipoUsuario);
 
     @Transactional
     @Modifying
@@ -29,4 +30,10 @@ public interface UsuariosRepository extends JpaRepository<UsuariosEntity, Intege
     void deleteUsuario(int idUsuario);
 
     UsuariosEntity findByEmailAndPassword(String email, String password);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update usuarios set nombre = ?1, apellidos = ?2, email = ?3 where idUsuario = ?4", nativeQuery = true)
+    void updateUsuario(String nombre, String apellidos, String email, int idUsuario);
+
 }

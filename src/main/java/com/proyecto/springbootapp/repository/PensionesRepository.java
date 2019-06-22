@@ -16,18 +16,18 @@ public interface PensionesRepository extends JpaRepository<PensionesEntity, Inte
     @Transactional
     @Modifying
     @Query(value = "delete from pension where idPension= ?1", nativeQuery = true)
-    PensionesEntity deletePension(int idPension);
+    void deletePension(int idPension);
 
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO pension ( descripcion, tipo, precio) values (?1,?2,?3)", nativeQuery = true)
-    PensionesEntity createPension (String descripcion, String tipo, Double precio);
+    void createPension (String descripcion, String tipo, Double precio);
 
 
     @Transactional
     @Modifying
     @Query(value = "update pension set ( descripcion, tipo, precio) = (?1,?2,?3) where idPension = ?4", nativeQuery = true)
-    PensionesEntity updatePension (String descripcion, String tipo, Double precio, int idPension);
+    void updatePension (String descripcion, String tipo, Double precio, int idPension);
 
     PensionesEntity findIdPensionesByTipo(String tipo);
 

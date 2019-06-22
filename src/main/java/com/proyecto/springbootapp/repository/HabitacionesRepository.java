@@ -36,20 +36,30 @@ public interface HabitacionesRepository extends JpaRepository<HabitacionesEntity
             "    and  habitaciones.precio between ?3 and ?4", nativeQuery = true)
     Iterable<HabitacionesEntity> findHabitacionesLibresPrecioBetween(Date fechaEntrada, Date fechaSalida, Double precio1, Double precio2);
 
-    @Query(value = "select distinct habitaciones.* from habitaciones inner join reservas on reservas.idHabitaciones in " +
-            "(select idHabitaciones from reservas where fechaEntrada and fechaSalida not between ?1 and ?2 )" +
-            "and habitaciones.precio BETWEEN ?3 AND ?4 and habitaciones.ocupantes = ?5", nativeQuery = true)
+    @Query(value = "select distinct habitaciones.* from habitaciones, reservas where  not exists (select 1" +
+            "                  from reservas" +
+            "                  where reservas.idHabitaciones = habitaciones.idHabitaciones and" +
+            "                        reservas.fechaEntrada <= ?1 and" +
+            "                        reservas.fechaSalida >= ?2" +
+            "                 ) and habitaciones.precio BETWEEN ?3 AND ?4 and habitaciones.ocupantes = ?5", nativeQuery = true)
     Iterable<HabitacionesEntity> findHabitacionesLibresPrecioBetweenOcupantes (Date fechaEntrada, Date fechaSalida, Double precio1, Double precio2, int ocupantes);
 
     @Transactional
     @Modifying
     @Query(value = "Insert into habitaciones (descripcion, numHabitacion, pathImg, tipo, precio, ocupantes) values(?1,?2,?3,?4,?5,?6)", nativeQuery = true)
-    HabitacionesEntity newHabitacion(String descripcion,int numHabitacion,String pathImg,String tipo, Double precio, int ocupantes);
+    void newHabitacion(String descripcion,int numHabitacion,String pathImg,String tipo, Double precio, int ocupantes);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "update habitaciones set descripcion = ?1, numHabitacion = ?2," +
+            " pathImg = ?3, tipo = ?4, precio = ?5, ocupantes = ?6 where habitaciones.idHabitaciones = ?7", nativeQuery = true)
+    void updateHabitacion(String descripcion,int numHabitacion,String pathImg,String tipo, Double precio, int ocupantes, int idHabitaciones);
 
     @Transactional
     @Modifying
     @Query(value = "Delete from habitaciones where idHabitaciones = ?1", nativeQuery = true)
-    HabitacionesEntity deleteHabitacion(int idHabitaciones);
+    void deleteHabitacion(int idHabitaciones);
 
 
 

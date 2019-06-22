@@ -5,6 +5,8 @@ import com.proyecto.springbootapp.repository.ValoracionesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -27,9 +29,12 @@ public class ValoracionesController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public @ResponseBody ValoracionesEntity createValoracion
-            ( @RequestBody  Date fecha, int idUsuario, int idReserva, String comentarios,  int valor){
-        return valoracionesRepository.createValoracion(fecha, idUsuario, idReserva, comentarios, valor);
+    public @ResponseBody void createValoracion
+            ( @RequestParam  String fecha,@RequestParam String email,@RequestParam int idReserva,@RequestParam String comentarios,@RequestParam  int valor) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date fechaDate = format.parse(fecha);
+         valoracionesRepository.createValoracion(fechaDate, email, idReserva, comentarios, valor);
     }
 
     @RequestMapping(value ="/usuario/{idUsuario}", method = RequestMethod.GET)

@@ -18,8 +18,8 @@ public interface ValoracionesRepository extends JpaRepository<ValoracionesEntity
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO valoraciones ( fecha, idUsuario, idReserva, comentarios, valor) values (?1,?2,?3,?4,?5)", nativeQuery = true)
-    ValoracionesEntity createValoracion(Date fecha, int idUsuario, int idReserva, String comentarios, int valor );
+    @Query(value = "INSERT INTO valoraciones ( fecha, idUsuario, idReserva, comentarios, valor) values (?1,(select idUsuario from usuarios where email like ?2),?3,?4,?5)", nativeQuery = true)
+    void createValoracion(Date fecha, String email, int idReserva, String comentarios, int valor );
 
     @Query(value = "Select * from valoraciones where idUsuario = ?1", nativeQuery = true)
     Iterable<ValoracionesEntity> findByIdUsuario (int idUsuario);

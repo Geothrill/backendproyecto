@@ -22,20 +22,20 @@ public class PensionesController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public @ResponseBody
-    PensionesEntity createPension(@RequestParam String descripcion, @RequestParam String tipo, @RequestParam Double precio) {
-        return pensionesRepository.createPension(descripcion, tipo, precio);
+    void createPension(@RequestParam String descripcion, @RequestParam String tipo, @RequestParam Double precio) {
+
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public @ResponseBody
-    PensionesEntity deletePension(@RequestParam int idPension) {
-        return pensionesRepository.deletePension(idPension);
+    void deletePension(@RequestParam int idPension) {
+
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public @ResponseBody
-    PensionesEntity updatePension(@RequestParam String descripcion, @RequestParam String tipo, @RequestParam Double precio, @RequestParam int idPension) {
-        return pensionesRepository.updatePension(descripcion, tipo, precio, idPension);
+    void updatePension(@RequestParam String descripcion, @RequestParam String tipo, @RequestParam Double precio, @RequestParam int idPension) {
+
     }
 
     @RequestMapping(value = "/idPension", method = RequestMethod.GET)

@@ -19,6 +19,7 @@ public class UsuariosEntity  {
     public String apellidos;
     public String email;
     public String password;
+    public char tipoUsuario;
 
 
     @OneToMany(mappedBy = "idUsuario")
@@ -32,12 +33,13 @@ public class UsuariosEntity  {
     public UsuariosEntity() {
     }
 
-    public UsuariosEntity(int idUsuario, String nombre, String apellidos, String email, String password) {
+    public UsuariosEntity(int idUsuario, String nombre, String apellidos, String email, String password, char tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.email = email;
         this.password = password;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public int getIdUsuario() {
@@ -78,6 +80,14 @@ public class UsuariosEntity  {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public char getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(char tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
     public List<ReservasEntity> getReservas() {

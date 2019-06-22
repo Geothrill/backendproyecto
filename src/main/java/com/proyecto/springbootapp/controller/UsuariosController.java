@@ -13,7 +13,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/usuarios")
 public class UsuariosController {
@@ -23,25 +22,27 @@ public class UsuariosController {
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public @ResponseBody Iterable<UsuariosEntity> getAllUsers() {
+    public @ResponseBody Iterable<UsuariosEntity> getAllUsers(@RequestParam char tipoUsuario) {
 
-        return usuariosRepository.findAll();
+        return usuariosRepository.findUsuariosByTipoUsuario(tipoUsuario);
     }
-    @RequestMapping(value = "/{idUsuario}", method = RequestMethod.GET)
+    @RequestMapping(value = "/usuario", method = RequestMethod.GET)
     @ResponseBody
-    public  UsuariosEntity getUsuarioByIdUsuario(@PathVariable("idUsuario") int idUsuario) {
+    public  UsuariosEntity getUsuarioByIdUsuario(@RequestParam int idUsuario) {
         return usuariosRepository.findByIdUsuario(idUsuario);
     }
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     @ResponseBody
-    public String createUsuario(@RequestParam String nombre, @RequestParam String apellidos,@RequestParam String email,@RequestParam String password) throws MessagingException {
+    public String createUsuario(@RequestParam String nombre, @RequestParam String apellidos,@RequestParam String email,@RequestParam String password, Character tipoUsuario) throws MessagingException {
+
+        tipoUsuario = new Character('U');
         email = email.toLowerCase();
 
         if (usuariosRepository.existsUsuarioByEmail(email)){
             return "";
         }
         else{
-            usuariosRepository.createUsuario(nombre, apellidos, email, password);
+            usuariosRepository.createUsuario(nombre, apellidos, email, password, tipoUsuario);
           mailRegistro(email, password);
             return "ok";
         }
@@ -57,13 +58,17 @@ public class UsuariosController {
         return usuariosRepository.findByEmailAndPassword(email, password);
     }
 
+    @RequestMapping(value = "/modificar", method = RequestMethod.GET)
+    @ResponseBody
+    public  void updateUsuario(@RequestParam String nombre, @RequestParam String apellidos, @RequestParam String email, @RequestParam int idUsuario) {
+         usuariosRepository.updateUsuario(nombre, apellidos, email, idUsuario);
+    }
+
     public void mailRegistro(String email, String password) {
 
 
-        String host="smtp.gmail.com";
         final String user="d15juan2009@gmail.com";
         final String pass="sifnpymzvcskruiq";
-        String to=email;
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -89,7 +94,8 @@ public class UsuariosController {
                     Message.RecipientType.TO, InternetAddress.parse(email));
             message.setSubject("Su registro se ha completado");
 
-            String msg = "Gracias por realizar su registro <br>" +
+            String msg = "<meta charset=\"utf-8\">  " +
+                    "Gracias por realizar su registro <br>" +
                     "A continuación le recordamos sus datos de acceso: <br>" +
                     "Email: " + email + "<br>" +
                     "Contraseña: " + password + "<br><br>" +

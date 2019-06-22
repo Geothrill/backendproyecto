@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/habitaciones")
+    @RequestMapping("/habitaciones")
 public class HabitacionesController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class HabitacionesController {
 
         return respuesta;
     }
-    @RequestMapping(value = "/idHabitaciones", method = RequestMethod.GET)
+    @RequestMapping(value = "/habitacion", method = RequestMethod.GET)
     public @ResponseBody
     HabitacionesEntity getHabitacionesByIdHabitaciones(@RequestParam int idHabitaciones) {
 
@@ -89,18 +89,86 @@ public class HabitacionesController {
         return habitacionesRepository.findByOcupantesAndPrecioBetween(ocupantes, precio1, precio2);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
     public @ResponseBody
-    HabitacionesEntity createHabitacion
-            (@RequestParam String descripcion,@RequestParam int numHabitacion,@RequestParam String pathImg,@RequestParam String tipo,@RequestParam Double precio,@RequestParam int ocupantes) {
-        return habitacionesRepository.newHabitacion(descripcion,numHabitacion, pathImg, tipo, precio, ocupantes);
+    void createHabitacion
+            ( @RequestParam int numHabitacion,@RequestParam String tipo,@RequestParam Double precio,@RequestParam int ocupantes) {
+
+        String descripcion ="";
+         String pathImg = "";
+
+        if (ocupantes == 1){
+            if(tipo.equals("Simple")){
+                pathImg = "www.algo.es";
+                descripcion = "prueba 1";
+
+
+            }else if(tipo.equals("Doble")){
+                pathImg = "www.algo.es";
+                descripcion = "prueba 1";
+
+            }
+
+        }else if (ocupantes == 2){
+            pathImg = "www.algo.es";
+            descripcion = "prueba 1";
+
+        }else if(ocupantes == 3){
+            pathImg = "www.algo.es";
+            descripcion = "prueba 1";
+
+        }else if(ocupantes == 4){
+            pathImg = "www.algo.es";
+            descripcion = "prueba 1";
+
+        }
+        habitacionesRepository.newHabitacion(descripcion,numHabitacion, pathImg, tipo, precio, ocupantes);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public @ResponseBody
-    HabitacionesEntity deleteHabitacion(@RequestParam int idHabitaciones) {
-        return habitacionesRepository.deleteHabitacion(idHabitaciones);
+    void deleteHabitacion(@RequestParam int idHabitaciones) {
+        habitacionesRepository.deleteHabitacion(idHabitaciones);
     }
+
+    @RequestMapping(value = "/modificar", method = RequestMethod.GET)
+    public @ResponseBody
+    void updateHabitacion(@RequestParam int numHabitacion, @RequestParam String tipo,
+                          @RequestParam Double precio, @RequestParam int ocupantes, @RequestParam int idHabitaciones) {
+
+        String descripcion ="";
+        String pathImg = "";
+
+        if (ocupantes == 1){
+            if(tipo.equals("Simple")){
+                pathImg = "www.algo.es";
+                descripcion = "prueba 1";
+
+
+            }else if(tipo.equals("Doble")){
+                pathImg = "www.algo.es";
+                descripcion = "prueba 1";
+
+            }
+
+        }else if (ocupantes == 2){
+            pathImg = "www.algo.es";
+            descripcion = "prueba 1";
+
+        }else if(ocupantes == 3){
+            pathImg = "www.algo.es";
+            descripcion = "prueba 1";
+
+        }else if(ocupantes == 4){
+            pathImg = "www.algo.es";
+            descripcion = "prueba 1";
+
+        }
+        habitacionesRepository.updateHabitacion(descripcion,numHabitacion, pathImg, tipo, precio, ocupantes, idHabitaciones);
+    }
+
+
+
 
 
 
