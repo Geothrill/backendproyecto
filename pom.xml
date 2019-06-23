@@ -90,11 +90,15 @@
         </repository>
     </repositories>
 
+    <!-- plugin para hacer que sea completamente ejecutable con maven y además convierta nuestro proyecto en un .jar -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
             </plugin>
         </plugins>
     </build>
