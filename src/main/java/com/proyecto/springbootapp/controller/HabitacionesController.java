@@ -58,7 +58,7 @@ public class HabitacionesController {
      * @param idHabitaciones id de la habitación
      * @return habitación según su id
      */
-    @RequestMapping(value = "/habitacion", method = RequestMethod.GET)
+    @RequestMapping(value = "/{idHabitaciones}", method = RequestMethod.GET)
     public @ResponseBody
     HabitacionesEntity getHabitacionesByIdHabitaciones(@PathVariable int idHabitaciones) {
 
