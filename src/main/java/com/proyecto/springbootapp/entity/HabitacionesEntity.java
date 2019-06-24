@@ -7,6 +7,9 @@ import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * entidad de las habitaciones, su nombre y la tabla a la que refiere
+ */
 @Entity(name = "habitaciones")
 @Table(name = "habitaciones")
 public class HabitacionesEntity  {
@@ -25,9 +28,23 @@ public class HabitacionesEntity  {
     @JsonBackReference
     private List<ReservasEntity> reservas;
 
+    /**
+     * constructor por defecto
+     */
     public HabitacionesEntity() {
     }
 
+    /**
+     * constructor con lo necesario para una habitación
+     * @param idHabitaciones
+     * @param descripcion
+     * @param num_habitacion
+     * @param pathImg
+     * @param tipo
+     * @param precio
+     * @param ocupantes
+     * @param reservas
+     */
     public HabitacionesEntity(int idHabitaciones, String descripcion, int num_habitacion, String pathImg, String tipo, double precio, int ocupantes, List<ReservasEntity> reservas) {
         this.idHabitaciones = idHabitaciones;
         this.descripcion = descripcion;

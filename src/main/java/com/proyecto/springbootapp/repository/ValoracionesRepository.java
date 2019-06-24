@@ -10,23 +10,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Repositorio de valoraciones, aquí se incluyen todas las consultas a realizar referentes a las valoraciones
+ */
 @Repository
 public interface ValoracionesRepository extends JpaRepository<ValoracionesEntity, Integer> {
+    /**
+     * función que retorna todas las valoraciones
+     * @return todas las valoraciones
+     */
     List<ValoracionesEntity> findAll();
 
-    ValoracionesEntity findByIdValoraciones(int idValoraciones);
-
+    /**
+     * función que crea una valoración
+     * @param fecha
+     * @param email
+     * @param idReserva
+     * @param comentarios
+     * @param valor
+     */
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO valoraciones ( fecha, idUsuario, idReserva, comentarios, valor) values (?1,(select idUsuario from usuarios where email like ?2),?3,?4,?5)", nativeQuery = true)
     void createValoracion(Date fecha, String email, int idReserva, String comentarios, int valor );
 
-    @Query(value = "Select * from valoraciones where idUsuario = ?1", nativeQuery = true)
-    Iterable<ValoracionesEntity> findByIdUsuario (int idUsuario);
-
-    @Transactional
-    @Modifying
-    @Query(value =" delete from valoraciones where idValoraciones = ?1", nativeQuery = true)
-    ValoracionesEntity deleteValoracion(int idValoraciones);
 
 }

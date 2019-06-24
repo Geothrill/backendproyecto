@@ -12,6 +12,7 @@
     <groupId>com.iespoligonosur</groupId>
     <artifactId>proyecto</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <!-- añadimos el FW a usar y su versión correspondiente  -->
     <parent>
@@ -90,15 +91,12 @@
         </repository>
     </repositories>
 
-    <!-- plugin para hacer que sea completamente ejecutable con maven y además convierta nuestro proyecto en un .jar -->
+    <!-- plugin para hacer que sea completamente ejecutable con maven -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <executable>true</executable>
-                </configuration>
             </plugin>
         </plugins>
     </build>

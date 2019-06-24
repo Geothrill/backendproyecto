@@ -11,7 +11,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * entidad de las reservas, su nombre y la tabla a la que refiere
+ */
 @Entity(name = "Reservas")
 @Table(name = "reservas")
 public class ReservasEntity  {
@@ -46,14 +48,25 @@ public class ReservasEntity  {
     public PensionesEntity idPension;
 
 
-    
+    /**
+     * constructor por defecto
+     */
     public ReservasEntity() {
     }
 
-    public ReservasEntity(int idReservaCompartida) {
-        this.idReservaCompartida = idReservaCompartida;
-    }
-
+    /**
+     * constructor completo
+     * @param idReservas
+     * @param fechaReserva
+     * @param fechaEntrada
+     * @param fechaSalida
+     * @param precio
+     * @param usuario
+     * @param idValoraciones
+     * @param habitaciones
+     * @param pensiones
+     * @param idReservaCompartida
+     */
     public ReservasEntity(int idReservas, Date fechaReserva, Date fechaEntrada, Date fechaSalida, double precio,
                           UsuariosEntity usuario, ValoracionesEntity idValoraciones, HabitacionesEntity habitaciones, PensionesEntity pensiones, int idReservaCompartida) {
         this.idReservas = idReservas;

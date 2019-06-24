@@ -2,7 +2,6 @@ package com.proyecto.springbootapp.controller;
 
 import com.proyecto.springbootapp.entity.UsuariosEntity;
 import com.proyecto.springbootapp.repository.UsuariosRepository;
-import com.proyecto.springbootapp.utils.EnviarEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +12,9 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
+/**
+ * clase controladora de los usuarios, incluye un mapeo por defecto que la identifica
+ */
 @RestController
 @RequestMapping("/usuarios")
 public class UsuariosController {
@@ -20,20 +22,40 @@ public class UsuariosController {
     @Autowired
     UsuariosRepository usuariosRepository;
 
-
+    /**
+     * función que devuelve un listado de usuarios según su tipo
+     * @param tipoUsuario para filtar el resultado
+     * @return lista de usuarios según su tipo
+     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody Iterable<UsuariosEntity> getAllUsers(@RequestParam char tipoUsuario) {
 
         return usuariosRepository.findUsuariosByTipoUsuario(tipoUsuario);
     }
+
+    /**
+     * función que devuelve un usuario según su id
+     * @param idUsuario id del usuario
+     * @return usuario
+     */
     @RequestMapping(value = "/usuario", method = RequestMethod.GET)
     @ResponseBody
     public  UsuariosEntity getUsuarioByIdUsuario(@RequestParam int idUsuario) {
         return usuariosRepository.findByIdUsuario(idUsuario);
     }
+
+    /**
+     * función que crea un usuario
+     * @param nombre
+     * @param apellidos
+     * @param email
+     * @param password
+     * @param tipoUsuario por defecto será de tipo usuario
+     * @return respuesta "" en caso negativo, "ok" en caso positivo
+     */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     @ResponseBody
-    public String createUsuario(@RequestParam String nombre, @RequestParam String apellidos,@RequestParam String email,@RequestParam String password, Character tipoUsuario) throws MessagingException {
+    public String createUsuario(@RequestParam String nombre, @RequestParam String apellidos,@RequestParam String email,@RequestParam String password, Character tipoUsuario) {
 
         tipoUsuario = new Character('U');
         email = email.toLowerCase();
@@ -47,23 +69,47 @@ public class UsuariosController {
             return "ok";
         }
     }
+
+    /**
+     * función que elimina un usuario según su id
+     * @param idUsuario
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public void deleteUsuario(@RequestParam int idUsuario){
         usuariosRepository.deleteUsuario(idUsuario);
 
     }
 
+    /**
+     * función que valida que los campos incluidos estén en la base de datos para hacer login
+     * @param email
+     * @param password
+     * @return usuario en caso de que exista, valor vacío en caso negativo
+     */
     @RequestMapping(value ="/login", method = RequestMethod.GET)
     public UsuariosEntity login(@RequestParam String email,@RequestParam String password){
         return usuariosRepository.findByEmailAndPassword(email, password);
     }
 
+    /**
+     * función que modifica un usuario según su id
+     * @param nombre
+     * @param apellidos
+     * @param email
+     * @param idUsuario id del usuario a modificar
+     */
     @RequestMapping(value = "/modificar", method = RequestMethod.GET)
     @ResponseBody
     public  void updateUsuario(@RequestParam String nombre, @RequestParam String apellidos, @RequestParam String email, @RequestParam int idUsuario) {
          usuariosRepository.updateUsuario(nombre, apellidos, email, idUsuario);
     }
 
+    /**
+     * clase que envía un mail al usuario cuando realiza un registro, incluye las propiedades para acceder al
+     * servicio SMTP y el correo usado para el envío de mails
+     * @param email al que se envía el mail, además de ser un dato de acceso
+     * @param password dato de acceso al aplicativo
+     */
     public void mailRegistro(String email, String password) {
 
 
@@ -84,7 +130,6 @@ public class UsuariosController {
                     }
                 });
 
-        //Compose the message
         try {
 
 

@@ -10,7 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-
+/**
+ * entidad de las valoraciones, su nombre y la tabla a la que refiere
+ */
 @Entity(name = "valoraciones")
 @Table(name = "valoraciones")
 public class ValoracionesEntity  {
@@ -31,10 +33,21 @@ public class ValoracionesEntity  {
     public String comentarios;
     public int valor;
 
-
+    /**
+     * constructor por defecto
+     */
     public ValoracionesEntity() {
     }
 
+    /**
+     * constructor completo
+     * @param idValoraciones
+     * @param fecha
+     * @param idUsuario
+     * @param idReserva
+     * @param comentarios
+     * @param valor
+     */
     public ValoracionesEntity(int idValoraciones, Date fecha, UsuariosEntity idUsuario, ReservasEntity idReserva, String comentarios, int valor) {
         this.idValoraciones = idValoraciones;
         this.fecha = fecha;

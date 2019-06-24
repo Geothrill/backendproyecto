@@ -9,26 +9,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Repositorio de pensiones, aquí se incluyen todas las consultas a realizar referentes a las pensiones
+ */
 @Repository
 public interface PensionesRepository extends JpaRepository<PensionesEntity, Integer> {
+    /**
+     * función que devuelve todas las pensiones
+     * @return todas las pensiones
+     */
     List<PensionesEntity> findAll();
 
-    @Transactional
-    @Modifying
-    @Query(value = "delete from pension where idPension= ?1", nativeQuery = true)
-    void deletePension(int idPension);
-
-    @Transactional
-    @Modifying
-    @Query(value = "INSERT INTO pension ( descripcion, tipo, precio) values (?1,?2,?3)", nativeQuery = true)
-    void createPension (String descripcion, String tipo, Double precio);
-
-
-    @Transactional
-    @Modifying
-    @Query(value = "update pension set ( descripcion, tipo, precio) = (?1,?2,?3) where idPension = ?4", nativeQuery = true)
-    void updatePension (String descripcion, String tipo, Double precio, int idPension);
-
+    /**
+     * función que devuelve la id de una pensión según el tipo de pensión
+     * @param tipo de la pensión
+     * @return id de la pensión
+     */
     PensionesEntity findIdPensionesByTipo(String tipo);
 
 }

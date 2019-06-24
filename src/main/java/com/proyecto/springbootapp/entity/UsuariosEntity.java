@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+/**
+ * entidad de los usuarios, su nombre y la tabla a la que refiere
+ */
 @Entity(name = "usuarios")
 @Table(name = "usuarios")
 public class UsuariosEntity  {
@@ -30,9 +32,21 @@ public class UsuariosEntity  {
     @JsonBackReference
     private List<ValoracionesEntity> valoraciones;
 
+    /**
+     * constructor por defecto
+     */
     public UsuariosEntity() {
     }
 
+    /**
+     * constructor completo
+     * @param idUsuario
+     * @param nombre
+     * @param apellidos
+     * @param email
+     * @param password
+     * @param tipoUsuario
+     */
     public UsuariosEntity(int idUsuario, String nombre, String apellidos, String email, String password, char tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;

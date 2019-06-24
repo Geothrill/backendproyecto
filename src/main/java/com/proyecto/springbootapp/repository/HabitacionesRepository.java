@@ -10,32 +10,33 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Repositorio de habitaciones, aquí se incluyen todas las consultas a realizar referentes a las habitaciones
+ */
 @Repository
 public interface HabitacionesRepository extends JpaRepository<HabitacionesEntity, Integer> {
-
+    /**
+     * función que retorna todas las habitaciones
+     * @return lista de habitaciones
+     */
     List<HabitacionesEntity> findAll();
 
+    /**
+     * función que retorna una habitación en función de su id
+     * @param idHabitaciones id de la habitación
+     * @return una habitación
+     */
     HabitacionesEntity findByIdHabitaciones(int idHabitaciones);
 
-    List<HabitacionesEntity> findByPrecioBetween(Double precio1, Double precio2);
-
-    List<HabitacionesEntity> findByPrecioBetweenOrderByPrecioAsc(Double precio1, Double precio2);
-
-    List<HabitacionesEntity> findByPrecioBetweenOrderByPrecioDesc(Double precio1, Double precio2);
-
-    List<HabitacionesEntity> findByOcupantes (int ocupantes);
-
-    List<HabitacionesEntity> findByOcupantesAndPrecioBetween(int ocupantes, Double precio1, Double precio2);
-
-    @Query(value = "SELECT distinct habitaciones.*  FROM habitaciones INNER JOIN reservas  ON  reservas.idHabitaciones in" +
-            "            (select idHabitaciones from reservas where fechaEntrada and fechaSalida not between ?1 and ?2) order by precio Desc" , nativeQuery = true)
-    Iterable<HabitacionesEntity> findHabitacionesLibres(Date fechaEntrada, Date fechaSalida);
-
-    @Query(value = "SELECT distinct habitaciones.*  FROM habitaciones INNER JOIN reservas  ON  reservas.idHabitaciones in" +
-            "            (select idHabitaciones from reservas where fechaEntrada and fechaSalida not between ?1 and ?2)" +
-            "    and  habitaciones.precio between ?3 and ?4", nativeQuery = true)
-    Iterable<HabitacionesEntity> findHabitacionesLibresPrecioBetween(Date fechaEntrada, Date fechaSalida, Double precio1, Double precio2);
-
+    /**
+     * función que retorna todas las habitaciones disponibles para realizar una reserva
+     * @param fechaEntrada fecha en la que se quiere acceder
+     * @param fechaSalida fecha de finalización de la reserva
+     * @param precio1 cantidad mínima a pagar
+     * @param precio2 cantidad máxima a pagar
+     * @param ocupantes
+     * @return una lista de habitaciones disponibles para reservar
+     */
     @Query(value = "select distinct habitaciones.* from habitaciones, reservas where  not exists (select 1" +
             "                  from reservas" +
             "                  where reservas.idHabitaciones = habitaciones.idHabitaciones and" +
@@ -44,18 +45,40 @@ public interface HabitacionesRepository extends JpaRepository<HabitacionesEntity
             "                 ) and habitaciones.precio BETWEEN ?3 AND ?4 and habitaciones.ocupantes = ?5", nativeQuery = true)
     Iterable<HabitacionesEntity> findHabitacionesLibresPrecioBetweenOcupantes (Date fechaEntrada, Date fechaSalida, Double precio1, Double precio2, int ocupantes);
 
+    /**
+     * función que permite crear una habitación
+     * @param descripcion
+     * @param numHabitacion
+     * @param pathImg
+     * @param tipo
+     * @param precio
+     * @param ocupantes
+     */
     @Transactional
     @Modifying
     @Query(value = "Insert into habitaciones (descripcion, numHabitacion, pathImg, tipo, precio, ocupantes) values(?1,?2,?3,?4,?5,?6)", nativeQuery = true)
     void newHabitacion(String descripcion,int numHabitacion,String pathImg,String tipo, Double precio, int ocupantes);
 
-
+    /**
+     * función que modifica una habitación ya existente según su id
+     * @param descripcion
+     * @param numHabitacion
+     * @param pathImg
+     * @param tipo
+     * @param precio
+     * @param ocupantes
+     * @param idHabitaciones id de la habitación a modificar
+     */
     @Transactional
     @Modifying
     @Query(value = "update habitaciones set descripcion = ?1, numHabitacion = ?2," +
             " pathImg = ?3, tipo = ?4, precio = ?5, ocupantes = ?6 where habitaciones.idHabitaciones = ?7", nativeQuery = true)
     void updateHabitacion(String descripcion,int numHabitacion,String pathImg,String tipo, Double precio, int ocupantes, int idHabitaciones);
 
+    /**
+     * función que elimina una habitación
+     * @param idHabitaciones id de la habitación a eliminar
+     */
     @Transactional
     @Modifying
     @Query(value = "Delete from habitaciones where idHabitaciones = ?1", nativeQuery = true)

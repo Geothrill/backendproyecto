@@ -7,7 +7,9 @@ import javax.persistence.*;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+/**
+ * entidad de las pensiones, su nombre y la tabla a la que refiere
+ */
 @Entity(name = "pensiones")
 @Table(name = "pension")
 public class PensionesEntity  {
@@ -22,9 +24,20 @@ public class PensionesEntity  {
     @JsonBackReference
     private List<ReservasEntity> reservas;
 
+    /**
+     * constructor por defecto
+     */
     public PensionesEntity() {
     }
 
+    /**
+     * constructor completo
+     * @param idPension
+     * @param descripcion
+     * @param tipo
+     * @param precio
+     * @param reservas
+     */
     public PensionesEntity(int idPension, String descripcion, String tipo, double precio, List<ReservasEntity> reservas) {
         this.idPension = idPension;
         this.descripcion = descripcion;

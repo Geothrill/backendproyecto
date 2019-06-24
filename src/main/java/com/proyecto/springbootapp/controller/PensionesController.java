@@ -6,6 +6,9 @@ import com.proyecto.springbootapp.repository.PensionesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * clase controladora de las pensiones, incluye un mapeo por defecto que la identifica
+ */
 @RestController
 @RequestMapping("/pensiones")
 public class PensionesController {
@@ -13,6 +16,10 @@ public class PensionesController {
     @Autowired
     PensionesRepository pensionesRepository;
 
+    /**
+     * función que devuelve todas las funciones
+     * @return lista de pensiones
+     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody
     Iterable<PensionesEntity> getAllPensiones() {
@@ -20,24 +27,11 @@ public class PensionesController {
         return pensionesRepository.findAll();
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public @ResponseBody
-    void createPension(@RequestParam String descripcion, @RequestParam String tipo, @RequestParam Double precio) {
-
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public @ResponseBody
-    void deletePension(@RequestParam int idPension) {
-
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
-    public @ResponseBody
-    void updatePension(@RequestParam String descripcion, @RequestParam String tipo, @RequestParam Double precio, @RequestParam int idPension) {
-
-    }
-
+    /**
+     * función que devuelve una pensión según su tipo
+     * @param tipo
+     * @return pensión
+     */
     @RequestMapping(value = "/idPension", method = RequestMethod.GET)
     public @ResponseBody
     PensionesEntity getIdPensionByTipo(@RequestParam String tipo) {
