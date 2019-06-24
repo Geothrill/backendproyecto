@@ -60,7 +60,7 @@ public class HabitacionesController {
      */
     @RequestMapping(value = "/habitacion", method = RequestMethod.GET)
     public @ResponseBody
-    HabitacionesEntity getHabitacionesByIdHabitaciones(@RequestParam int idHabitaciones) {
+    HabitacionesEntity getHabitacionesByIdHabitaciones(@PathVariable int idHabitaciones) {
 
         return habitacionesRepository.findByIdHabitaciones(idHabitaciones);
     }
